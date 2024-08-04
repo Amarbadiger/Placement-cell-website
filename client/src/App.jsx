@@ -16,6 +16,7 @@ import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import CreatePost from "./pages/Post/CreatePost";
 import UpdatePost from "./pages/Post/UpdatePost";
+import HomePostDetails from "./pages/HomePostDetails";
 
 function App() {
   const loading = useSelector((state) => state.alerts.loading);
@@ -48,6 +49,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/Homepost/:id"
+              element={
+                <ProtectedRoute>
+                  <HomePostDetails />
                 </ProtectedRoute>
               }
             />

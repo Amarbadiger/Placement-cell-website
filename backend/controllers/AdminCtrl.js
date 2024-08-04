@@ -1,4 +1,5 @@
 const userModel = require("../models/userModels");
+const HomeData = require("../models/adminHomepage");
 const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
 
@@ -83,12 +84,14 @@ const postUpdate = [
       // Get text from request body
       const text = req.body.text;
 
-      // Optionally, save image URL and text to your database
-      // Example:
-      // await YourDatabaseModel.create({ text, imageUrl: result.secure_url });
+      // Save image URL and text to your database
+      const homepagedata = await HomeData.create({
+        text,
+        imgurl: result.secure_url,
+      });
 
       // Respond with success message or image details
-      res.json({ success: true, text, imageUrl: result.secure_url });
+      res.json({ success: true, text, imgurl: result.secure_url });
     } catch (err) {
       console.error(err);
       res.status(500).json({ success: false, error: "Error uploading data" });
@@ -96,9 +99,49 @@ const postUpdate = [
   },
 ];
 
+const homePagePost = async (req, res) => {
+  try {
+    const homePost = await HomeData.find();
+    if (!homePost) {
+      res.status(200).send({ message: "Post not Found", success: true });
+    }
+    res.status(200).send({
+      message: "Post Fetched successfully",
+      success: true,
+      data: homePost,
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .send({ message: "Failed to fetch the post", success: false });
+  }
+};
+
+const singleHomePagePost = async (req, res) => {
+  const { params } = req.body;
+  try {
+    const singledata = await HomeData.findOne({ _id: params });
+    if (!singledata) {
+      res.status(200).send({ message: "Not Found", success: true });
+    }
+    res
+      .status(200)
+      .send({ message: "Data Found", success: true, data: singledata });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Failed to fetch",
+      success: false,
+    });
+  }
+};
+
 module.exports = {
   getAllusersController,
   getAllRecruiter,
   getAllStudent,
   postUpdate,
+  homePagePost,
+  singleHomePagePost,
 };

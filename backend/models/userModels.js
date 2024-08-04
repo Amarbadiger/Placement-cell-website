@@ -44,6 +44,10 @@ const userSchema = new mongoose.Schema({
     type: String, // Define phoneNumber as a String
     default: "", // Provide a default value if necessary
   },
+  img: {
+    type: String,
+    default: "",
+  },
 });
 
 // Create a Mongoose model based on the schema, named 'User'

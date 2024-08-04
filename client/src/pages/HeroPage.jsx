@@ -123,12 +123,12 @@ const HeroPage = () => {
       <div className="bg-gradient-to-l from-gray-900 via-gray-800 to-black text-white rounded-lg px-4 md:px-6 py-8 md:py-12 shadow-md mb-10 mt-10">
         <h2 className="text-xl md:text-2xl font-semibold mb-6">Contact Us</h2>
         <form className="space-y-4 text-black" onSubmit={handleSubmit}>
-          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 text-white">
             <input
               type="text"
               name="firstname"
               placeholder="First Name"
-              className="w-full md:w-1/2 p-2 border rounded-lg "
+              className="w-full md:w-1/2 p-2 border rounded-lg bg-gray-700  border-gray-600"
               value={formData.firstname}
               onChange={handleChange}
               required
@@ -137,7 +137,7 @@ const HeroPage = () => {
               type="text"
               name="lastname"
               placeholder="Last Name"
-              className="w-full md:w-1/2 p-2 border rounded-lg"
+              className="w-full md:w-1/2 p-2 border rounded-lg bg-gray-700  border-gray-600"
               value={formData.lastname}
               onChange={handleChange}
               required
@@ -147,7 +147,7 @@ const HeroPage = () => {
             type="email"
             name="email"
             placeholder="Email"
-            className="w-full p-2 border rounded-lg"
+            className="w-full p-2 border rounded-lg bg-gray-700  border-gray-600 text-white"
             value={formData.email}
             onChange={handleChange}
             required
@@ -156,7 +156,7 @@ const HeroPage = () => {
             type="text"
             name="phone"
             placeholder="Phone Number"
-            className="w-full p-2 border rounded-lg"
+            className="w-full p-2 border rounded-lg bg-gray-700  border-gray-600 text-white"
             value={formData.phone}
             onChange={handleChange}
             required
@@ -164,7 +164,7 @@ const HeroPage = () => {
           <textarea
             name="message"
             placeholder="Message"
-            className="w-full p-2 border rounded-lg"
+            className="w-full p-2 border rounded-lg bg-gray-700  border-gray-600 text-white"
             rows="4"
             value={formData.message}
             onChange={handleChange}
