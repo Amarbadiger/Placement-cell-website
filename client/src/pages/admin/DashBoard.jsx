@@ -6,6 +6,7 @@ import { message } from "antd";
 const DashBoard = () => {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
+  const [link, setLink] = useState(""); // New state for link
   const [contactData, setContactData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -17,12 +18,18 @@ const DashBoard = () => {
     setImage(e.target.files[0]);
   };
 
+  const handleLinkChange = (e) => {
+    setLink(e.target.value);
+    console.log(e.target.value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // Set loading to true when form submission starts
     const formData = new FormData();
     formData.append("text", text);
     formData.append("image", image);
+    formData.append("link", link); // Append link to formData
 
     try {
       const token = localStorage.getItem("token");
@@ -37,7 +44,7 @@ const DashBoard = () => {
         }
       );
       message.success("Form submitted successfully");
-      console.log("Form submitted successfully:", response.data);
+
       // Handle success response
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -100,6 +107,18 @@ const DashBoard = () => {
                   id="image"
                   className="w-full border-2 p-2 rounded"
                   onChange={handleImageChange}
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="link" className="block mb-2 text-black">
+                  Link
+                </label>
+                <input
+                  type="text"
+                  id="link"
+                  className="w-full p-2 rounded border-2"
+                  value={link}
+                  onChange={handleLinkChange}
                 />
               </div>
               <button

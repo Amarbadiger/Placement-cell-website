@@ -1,6 +1,19 @@
 const userModel = require("../models/userModels");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const cloudinary = require("cloudinary").v2;
+const multer = require("multer");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SCRECT,
+});
+
+// Multer storage configuration
+const storage = multer.diskStorage({});
+
+const upload = multer({ storage });
 
 // Register Controller
 const registerController = async (req, res) => {
@@ -162,28 +175,45 @@ const getProfile = async (req, res) => {
   }
 };
 
-const editProfile = async (req, res) => {
-  const { name, email, phoneNumber, bio, skills } = req.body;
+const editProfile = [
+  upload.single("image"), // Multer middleware to handle single file upload
+  async (req, res) => {
+    const { name, email, phoneNumber, bio, skills, userId } = req.body;
 
-  try {
-    const user = await userModel.findById(req.body.userId);
+    try {
+      // Find the user by ID
+      const user = await userModel.findById(userId);
 
-    if (user) {
-      user.name = name || user.name;
-      user.email = email || user.email;
-      user.phoneNumber = phoneNumber || user.phoneNumber;
-      user.bio = bio || user.bio;
-      user.skills = skills || user.skills;
+      if (user) {
+        // Update user details only if they are provided
+        user.name = name || user.name;
+        user.email = email || user.email;
+        user.phoneNumber = phoneNumber || user.phoneNumber;
+        user.bio = bio || user.bio;
+        user.skills = skills
+          ? skills.split(",").map((skill) => skill.trim())
+          : user.skills; // Convert comma-separated string to array
 
-      await user.save();
-      res.json({ success: true, message: "Profile updated successfully" });
-    } else {
-      res.status(404).json({ success: false, message: "User not found" });
+        // Only update the image if a new file is uploaded
+        if (req.file) {
+          // Upload image to Cloudinary
+          const result = await cloudinary.uploader.upload(req.file.path);
+          user.image = result.secure_url;
+        }
+
+        // Save updated user
+        await user.save();
+
+        res.json({ success: true, message: "Profile updated successfully" });
+      } else {
+        res.status(404).json({ success: false, message: "User not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
     }
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-};
+  },
+];
 
 module.exports = {
   loginController,

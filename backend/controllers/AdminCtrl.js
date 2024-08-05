@@ -83,15 +83,16 @@ const postUpdate = [
 
       // Get text from request body
       const text = req.body.text;
-
+      const link = req.body.link;
       // Save image URL and text to your database
       const homepagedata = await HomeData.create({
         text,
         imgurl: result.secure_url,
+        link,
       });
 
       // Respond with success message or image details
-      res.json({ success: true, text, imgurl: result.secure_url });
+      res.json({ success: true, text, imgurl: result.secure_url, link });
     } catch (err) {
       console.error(err);
       res.status(500).json({ success: false, error: "Error uploading data" });

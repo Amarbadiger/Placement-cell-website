@@ -39,7 +39,7 @@ const PostPage = ({ userId }) => {
         message.success(res.data.message);
       }
     } catch (error) {
-      message.error("something went wrong");
+      message.error("Something went wrong");
       console.log(error);
     }
   };
@@ -49,7 +49,7 @@ const PostPage = ({ userId }) => {
   }, [userId]);
 
   return (
-    <div className="mt-6">
+    <div className="mt-6 ">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-gray-700">Posts</h2>
         <Link
@@ -68,7 +68,17 @@ const PostPage = ({ userId }) => {
             <h3 className="text-lg font-semibold text-gray-800">
               {post.title}
             </h3>
-            <p className="text-gray-600">{post.content}</p>
+
+            {post.image && (
+              <div className="mt-4">
+                <img
+                  src={post.image}
+                  alt="Post"
+                  className="w-full h-96 max-w-full object-contain rounded"
+                />
+              </div>
+            )}
+            <p className="text-gray-600 text-center">{post.content}</p>
             <div className="absolute top-2 right-2 flex space-x-2">
               <Link
                 to={`/user/update-post/${post._id}`}

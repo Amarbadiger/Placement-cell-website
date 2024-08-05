@@ -16,6 +16,35 @@ const postSchema = new mongoose.Schema(
       ref: "User", // Ensure this refers to your User model
       required: [true, "Author is required"],
     },
+    image: {
+      type: String,
+      default: "",
+    },
+    likes: {
+      // array of user ids
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "User",
+      default: [],
+    },
+    replies: [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        text: {
+          type: String,
+          required: true,
+        },
+        userProfilePic: {
+          type: String,
+        },
+        username: {
+          type: String,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

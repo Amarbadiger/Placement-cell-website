@@ -60,7 +60,7 @@ const HomePage = () => {
 
   return (
     <Layout>
-      <div className="text-gray-800 p-4 sm:p-8 rounded-lg shadow-lg w-full min-h-screen">
+      <div className="text-gray-800 p-4 sm:p-8 rounded-lg  w-full min-h-screen">
         <div className="text-center text-2xl font-bold text-white mb-6">
           All Updates
         </div>

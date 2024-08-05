@@ -12,7 +12,7 @@ const HomePagePost = ({ post }) => {
         <img
           src={post.imgurl}
           alt="Home"
-          className="w-full h-auto rounded-md mb-4"
+          className="w-full h-auto rounded-md mb-4 "
           style={{ maxHeight: "200px", objectFit: "cover" }}
         />
         <p className="text-base text-center">{post.text}</p>

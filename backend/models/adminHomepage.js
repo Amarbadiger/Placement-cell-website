@@ -7,6 +7,10 @@ const homepageDataSchema = new mongoose.Schema({
   imgurl: {
     type: String,
   },
+  link: {
+    type: String,
+    default: "",
+  },
 });
 
 const HomeData = mongoose.model("HomeData", homepageDataSchema);

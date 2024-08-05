@@ -44,18 +44,32 @@ const HomePostDetails = () => {
       <div className="container mx-auto p-4">
         <div className="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold mb-4 text-center">
-            {singlePost.title || "Post Title"}
+            {singlePost.title || ""}
           </h1>
-          {singlePost.imgurl && (
+          {singlePost.imgurl ? (
             <img
               src={singlePost.imgurl}
               alt={singlePost.title || "Post Image"}
               className="w-full h-auto max-h-96 object-cover rounded-lg mb-4 mx-auto"
             />
+          ) : (
+            <p className="text-gray-700 text-lg text-center mb-4">
+              No image available
+            </p>
           )}
-          <p className="text-gray-700 text-lg">
+          <p className="text-gray-700 text-lg mb-4">
             {singlePost.text || "Post content goes here..."}
           </p>
+          {singlePost.link && (
+            <a
+              href={singlePost.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              {singlePost.link}
+            </a>
+          )}
         </div>
       </div>
     </Layout>
