@@ -8,6 +8,9 @@ const {
   updatePost,
   getPosts,
   getPostById,
+  addComment,
+  unlikePost,
+  likePost,
 } = require("../controllers/postctrl");
 const authMidddleware = require("../middlewares/authMidddleware");
 
@@ -25,5 +28,14 @@ router.put("/posts/:id", authMidddleware, updatePost);
 
 //get Single post to update
 router.get("/singleposts/:id", authMidddleware, getPostById);
+
+// Like a post
+router.post("/posts/like/:postId", authMidddleware, likePost);
+
+// Unlike a post
+router.post("/posts/unlike/:postId", authMidddleware, unlikePost);
+
+// Add a comment to a post
+router.post("/posts/comment/:postId", authMidddleware, addComment);
 
 module.exports = router;

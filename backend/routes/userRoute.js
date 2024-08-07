@@ -7,6 +7,8 @@ const {
   deleteAllNotificationController,
   getProfile,
   editProfile,
+  unfollowUser,
+  followUser,
 } = require("../controllers/userCtrl");
 const authMidddleware = require("../middlewares/authMidddleware");
 
@@ -37,9 +39,16 @@ router.post(
   authMidddleware,
   deleteAllNotificationController
 );
+// show Profile
+router.get("/profile/:id", authMidddleware, getProfile);
 
-router.post("/profile", authMidddleware, getProfile);
-
+//edit profile
 router.put("/edit-profile", authMidddleware, editProfile);
+
+// Route to follow a user
+router.post("/follow/:userId", authMidddleware, followUser);
+
+// Route to unfollow a user
+router.post("/unfollow/:userId", authMidddleware, unfollowUser);
 
 module.exports = router;

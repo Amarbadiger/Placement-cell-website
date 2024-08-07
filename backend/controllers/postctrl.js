@@ -130,10 +130,116 @@ const getPostById = async (req, res) => {
   }
 };
 
+// Like a post
+const likePost = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const userId = req.body.userId;
+
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User ID is required" });
+    }
+
+    const post = await Post.findById(postId);
+    if (!post)
+      return res
+        .status(404)
+        .json({ success: false, message: "Post not found" });
+
+    if (post.likes.includes(userId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Post already liked" });
+    }
+
+    post.likes.push(userId);
+    await post.save();
+
+    res.status(200).json({ success: true, message: "Post liked" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Unlike a post
+const unlikePost = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const userId = req.body.userId;
+
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User ID is required" });
+    }
+
+    const post = await Post.findById(postId);
+    if (!post)
+      return res
+        .status(404)
+        .json({ success: false, message: "Post not found" });
+
+    if (!post.likes.includes(userId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Post not liked" });
+    }
+
+    post.likes = post.likes.filter((id) => id.toString() !== userId.toString());
+    await post.save();
+
+    res.status(200).json({ success: true, message: "Post unliked" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Add a comment to a post
+const addComment = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const { text, userId } = req.body;
+
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User ID is required" });
+    }
+
+    const post = await Post.findById(postId);
+    if (!post)
+      return res
+        .status(404)
+        .json({ success: false, message: "Post not found" });
+
+    post.replies.push({
+      userId,
+      text,
+      userProfilePic: req.user.image, // Assumes user profile picture is available in req.user
+      username: req.user.name, // Assumes user name is available in req.user
+    });
+    await post.save();
+
+    res.status(200).json({ success: true, message: "Comment added" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Reply to a comment (nested replies)
+
 module.exports = {
   createPost,
   deletePost,
   updatePost,
   getPosts,
   getPostById,
+  likePost,
+  unlikePost,
+  addComment,
 };

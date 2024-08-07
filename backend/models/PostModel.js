@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const postSchema = new mongoose.Schema(
   {
     title: {
@@ -13,7 +12,7 @@ const postSchema = new mongoose.Schema(
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Ensure this refers to your User model
+      ref: "users", // Ensure this refers to your User model
       required: [true, "Author is required"],
     },
     image: {
@@ -23,14 +22,14 @@ const postSchema = new mongoose.Schema(
     likes: {
       // array of user ids
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "User",
+      ref: "users",
       default: [],
     },
     replies: [
       {
         userId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
+          ref: "users",
           required: true,
         },
         text: {

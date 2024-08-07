@@ -49,14 +49,18 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    followers: {
-      type: [String],
-      default: [],
-    },
-    following: {
-      type: [String],
-      default: [],
-    },
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", // Reference to the User model
+      },
+    ],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", // Reference to the User model
+      },
+    ],
     isBlocked: {
       type: Boolean,
       default: false,

@@ -5,9 +5,9 @@ export const userMenu = [
     icon: "fa-solid fa-house",
   },
   {
-    name: "Connect",
-    path: "/connect",
-    icon: "fa-regular fa-address-book",
+    name: "Feed",
+    path: "/user/feeds",
+    icon: "fa-solid fa-bomb",
   },
 ];
 export const AdminMenu = [

@@ -27,6 +27,8 @@ app.use("/api/v1/admin", require("./routes/AdminRoute"));
 app.use("/api/v1/hero", require("./routes/contactFormRoute"));
 //Post Routes
 app.use("/api/v1/", require("./routes/PostRoute"));
+// Feed Route
+app.use("/api/v1/feeds", require("./routes/FeedRoute"));
 
 //port
 const port = process.env.PORT || 8080;

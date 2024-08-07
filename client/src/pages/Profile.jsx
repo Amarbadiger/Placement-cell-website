@@ -3,30 +3,23 @@ import Layout from "../components/Layout";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PostPage from "./Post/PostPage";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const params = useParams();
   const navigate = useNavigate();
 
-  // Hardcoded followers and following data
-  const [followers, setFollowers] = useState([
-    { name: "John Doe", id: "1" },
-    { name: "Jane Smith", id: "2" },
-  ]);
-  const [following, setFollowing] = useState([
-    { name: "Alice Johnson", id: "3" },
-    { name: "Bob Brown", id: "4" },
-  ]);
+  const token = localStorage.getItem("token");
+  const { user: currentUser } = useSelector((state) => state.user);
 
   const fetchUserProfile = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/user/profile",
-        { userId: params.id },
+      const res = await axios.get(
+        `http://localhost:8000/api/v1/user/profile/${params.id}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: "Bearer " + token,
           },
         }
       );
@@ -42,10 +35,13 @@ const Profile = () => {
     fetchUserProfile();
   }, [params.id]);
 
+  // Ensure currentUser is not null and compare IDs
+  const isCurrentUser = currentUser && currentUser._id === params.id;
+
   return (
     <Layout>
-      <div className=" min-h-screen py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen py-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px- lg:px-8">
           {user ? (
             <div className="space-y-8">
               {/* Profile Section */}
@@ -64,17 +60,11 @@ const Profile = () => {
                     </h1>
                     <p className="text-lg text-gray-600">{user.email}</p>
                     <div className="flex justify-center sm:justify-start mt-4">
-                      <button
-                        className="px-4 py-2 sm:px-5 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition mx-2"
-                        onClick={() => navigate(`/user/followers/${user._id}`)}
-                      >
-                        Followers ({followers.length})
+                      <button className="px-4 py-2 sm:px-5 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition mx-2">
+                        Followers ({user.followers.length})
                       </button>
-                      <button
-                        className="px-4 py-2 sm:px-5 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition mx-2"
-                        onClick={() => navigate(`/user/following/${user._id}`)}
-                      >
-                        Following ({following.length})
+                      <button className="px-4 py-2 sm:px-5 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition mx-2">
+                        Following ({user.following.length})
                       </button>
                     </div>
                   </div>
@@ -114,17 +104,19 @@ const Profile = () => {
                     )}
                   </div>
                 </div>
-                <Link
-                  className="px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                  to={`/user/edit-profile/${user?._id}`}
-                >
-                  Edit Profile
-                </Link>
+                {isCurrentUser && (
+                  <Link
+                    className="px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                    to={`/user/edit-profile/${user?._id}`}
+                  >
+                    Edit Profile
+                  </Link>
+                )}
               </div>
 
               {/* Post Page Section */}
               <div className="bg-gray-100 p-6 sm:p-8 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-                <PostPage userId={user._id} />
+                <PostPage userId={user._id} isCurrentUser={isCurrentUser} />
               </div>
             </div>
           ) : (

@@ -19,6 +19,7 @@ import UpdatePost from "./pages/Post/UpdatePost";
 import HomePostDetails from "./pages/HomePostDetails";
 import Following from "./pages/Follow/Following";
 import Followers from "./pages/Follow/Followers";
+import FeedPage from "./pages/FeedPage";
 function App() {
   const loading = useSelector((state) => state.alerts.loading);
   return (
@@ -50,6 +51,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/user/feeds"
+              element={
+                <ProtectedRoute>
+                  <FeedPage />
                 </ProtectedRoute>
               }
             />

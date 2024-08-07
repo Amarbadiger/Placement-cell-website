@@ -3,8 +3,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { message } from "antd";
 
-const PostPage = ({ userId }) => {
+const PostPage = ({ userId, isCurrentUser }) => {
   const [posts, setPosts] = useState([]);
+  const [expandedPosts, setExpandedPosts] = useState(new Set());
 
   const fetchPosts = async () => {
     try {
@@ -44,20 +45,34 @@ const PostPage = ({ userId }) => {
     }
   };
 
+  const togglePostContent = (postId) => {
+    setExpandedPosts((prev) => {
+      const newExpandedPosts = new Set(prev);
+      if (newExpandedPosts.has(postId)) {
+        newExpandedPosts.delete(postId);
+      } else {
+        newExpandedPosts.add(postId);
+      }
+      return newExpandedPosts;
+    });
+  };
+
   useEffect(() => {
     fetchPosts();
   }, [userId]);
 
   return (
-    <div className="mt-6 ">
+    <div className="mt-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-gray-700">Posts</h2>
-        <Link
-          to={`/user/create-post/${userId}`} // Adjust this path if necessary
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-        >
-          Create New Post
-        </Link>
+        {isCurrentUser && (
+          <Link
+            to={`/user/create-post/${userId}`} // Adjust this path if necessary
+            className="px-4 py-2  bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          >
+            Create New Post
+          </Link>
+        )}
       </div>
       {posts.length ? (
         posts.map((post) => (
@@ -73,58 +88,46 @@ const PostPage = ({ userId }) => {
               <div className="mt-4">
                 <img
                   src={post.image}
-                  alt="Post"
-                  className="w-full h-96 max-w-full object-contain rounded"
+                  alt={post.title}
+                  className="w-full max-h-[400px] object-cover rounded-lg"
                 />
               </div>
             )}
-            <p className="text-gray-600 text-center">{post.content}</p>
-            <div className="absolute top-2 right-2 flex space-x-2">
-              <Link
-                to={`/user/update-post/${post._id}`}
-                className="text-blue-500 hover:text-blue-700 transition"
-                title="Edit Post"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+
+            <p className="mt-4 text-gray-600">
+              {expandedPosts.has(post._id)
+                ? post.content
+                : `${post.content.slice(0, 100)}...`}
+              {post.content.length > 100 && (
+                <span
+                  className="text-blue-500 cursor-pointer"
+                  onClick={() => togglePostContent(post._id)}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 14l2 2 5-5-2-2-5 5zM14.828 7.172a4 4 0 00-5.656 0l-1.414 1.414a2 2 0 002.828 2.828L14.828 10a4 4 0 000-5.656z"
-                  />
-                </svg>
-              </Link>
-              <button
-                onClick={() => handleDelete(post._id)}
-                className="text-red-500 hover:text-red-700 transition"
-                title="Delete Post"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+                  {expandedPosts.has(post._id) ? " Show less" : " Show more"}
+                </span>
+              )}
+            </p>
+
+            {isCurrentUser && (
+              <>
+                <Link
+                  to={`/user/update-post/${post._id}`} // Adjust this path if necessary
+                  className="absolute top-2 right-12 text-blue-500 hover:text-blue-700"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L6 6M18 18L18 6M5 6H19M10 11V17M14 11V17"
-                  />
-                </svg>
-              </button>
-            </div>
+                  <i className="fas fa-edit"></i>
+                </Link>
+                <button
+                  onClick={() => handleDelete(post._id)}
+                  className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                >
+                  <i className="fas fa-trash-alt"></i>
+                </button>
+              </>
+            )}
           </div>
         ))
       ) : (
-        <p className="text-gray-600">No posts available.</p>
+        <p className="text-gray-600">No posts available</p>
       )}
     </div>
   );

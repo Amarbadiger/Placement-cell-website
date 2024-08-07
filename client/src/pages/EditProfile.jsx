@@ -19,18 +19,18 @@ const EditProfile = () => {
   const [submitting, setSubmitting] = useState(false); // For the loading state
   const params = useParams();
   const navigate = useNavigate();
-
+  const token = localStorage.getItem("token");
   const fetchUserProfile = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/user/profile",
-        { userId: params.id },
+      const res = await axios.get(
+        `http://localhost:8000/api/v1/user/profile/${params.id}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: "Bearer " + token,
           },
         }
       );
+
       if (res.data.success) {
         const { name, email, phoneNumber, bio, skills, image } = res.data.user;
         setFormData({
