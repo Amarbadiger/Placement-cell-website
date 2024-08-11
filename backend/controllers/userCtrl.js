@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
+const sendEmail = require("../utils/sendEmail"); // A utility function to send emails
+const crypto = require("crypto");
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -63,6 +65,15 @@ const loginController = async (req, res) => {
         .send({ message: "User not found", success: false });
     }
 
+    // Check if the user is blocked
+    if (user.isBlocked) {
+      // If the user is blocked, return a response indicating the account is blocked
+      return res.status(200).send({
+        message: "Account is blocked. Please contact support.",
+        success: false,
+      });
+    }
+
     // Compare the provided password with the hashed password in the database
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -85,6 +96,110 @@ const loginController = async (req, res) => {
     res.status(500).send({
       success: false,
       message: `Login Controller Error: ${error.message}`,
+    });
+  }
+};
+//Forgot Password Controller
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Check if user exists
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      console.log("User not found");
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpire = Date.now() + 1 * 60 * 1000; // 1 minutes
+
+    await user.save();
+
+    // Create reset URL
+    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+
+    // Email message
+    const message = `
+      <h1>You have requested a password reset</h1>
+      <p>Please click on the following link to reset your password:</p>
+      <a href="${resetUrl}">${resetUrl}</a>
+      <p>This link will expire in 10 minutes.</p>
+    `;
+
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: "Password Reset Request",
+        text: message,
+      });
+
+      res.status(200).json({
+        success: true,
+        message: "Email sent successfully. Please check your email.",
+      });
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save();
+      return res
+        .status(500)
+        .json({ success: false, message: "Email could not be sent" });
+    }
+  } catch (error) {
+    console.error("Server error:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Reset Password
+const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    // Find user with valid reset token and token hasn't expired
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+    const user = await userModel.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid or expired token" });
+    }
+
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Set new password and clear reset token
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password has been reset successfully",
+    });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
     });
   }
 };
@@ -324,6 +439,8 @@ const unfollowUser = async (req, res) => {
 module.exports = {
   loginController,
   registerController,
+  forgotPassword,
+  resetPassword,
   authController,
   getAllNotificationController,
   deleteAllNotificationController,

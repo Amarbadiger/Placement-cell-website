@@ -6,7 +6,9 @@ import { message } from "antd";
 const DashBoard = () => {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
-  const [link, setLink] = useState(""); // New state for link
+  const [link, setLink] = useState("");
+  const [title, setTitle] = useState(""); // New state for title
+  const [content, setContent] = useState(""); // New state for content
   const [contactData, setContactData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -23,13 +25,21 @@ const DashBoard = () => {
     console.log(e.target.value);
   };
 
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
+
+  const handleContentChange = (e) => {
+    setContent(e.target.value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true when form submission starts
+    setLoading(true);
     const formData = new FormData();
     formData.append("text", text);
     formData.append("image", image);
-    formData.append("link", link); // Append link to formData
+    formData.append("link", link);
 
     try {
       const token = localStorage.getItem("token");
@@ -44,18 +54,43 @@ const DashBoard = () => {
         }
       );
       message.success("Form submitted successfully");
-
-      // Handle success response
     } catch (error) {
       console.error("Error submitting form:", error);
-      // Handle error response
       message.error("Error submitting form");
     } finally {
-      setLoading(false); // Set loading to false when form submission ends
+      setLoading(false);
     }
   };
 
-  // Get contact details
+  const handleImportantSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const formData = {
+      title,
+      content,
+    };
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/admin/addImportant",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      message.success("Important content submitted successfully");
+    } catch (error) {
+      console.error("Error submitting important content:", error);
+      message.error("Error submitting important content");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchContactData = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -124,7 +159,7 @@ const DashBoard = () => {
               <button
                 type="submit"
                 className="mt-4 p-2 bg-blue-500 text-white rounded w-full flex items-center justify-center"
-                disabled={loading} // Disable button when loading
+                disabled={loading}
               >
                 {loading ? (
                   <svg

@@ -52,18 +52,24 @@ const userSchema = new mongoose.Schema(
     followers: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User", // Reference to the User model
+        ref: "users", // Reference to the User model
       },
     ],
     following: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User", // Reference to the User model
+        ref: "users", // Reference to the User model
       },
     ],
     isBlocked: {
       type: Boolean,
       default: false,
+    },
+    resetPasswordToken: {
+      type: String,
+    },
+    resetPasswordExpire: {
+      type: Date,
     },
   },
   {

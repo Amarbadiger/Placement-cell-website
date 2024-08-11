@@ -7,7 +7,6 @@ import Spinner from "./components/Spinner";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import HeroPage from "./pages/HeroPage";
-import Notification from "./pages/Notification";
 import GetAllUser from "./pages/admin/GetAllUser";
 import GetAllRecruiter from "./pages/admin/GetAllRecruiter";
 import GetAllStudents from "./pages/admin/GetAllStudents";
@@ -20,6 +19,9 @@ import HomePostDetails from "./pages/HomePostDetails";
 import Following from "./pages/Follow/Following";
 import Followers from "./pages/Follow/Followers";
 import FeedPage from "./pages/FeedPage";
+import Forgotpass from "./pages/Forgotpass";
+import ResetPassword from "./pages/ResetPassword";
+import MessagingPage from "./pages/MessagingPage";
 function App() {
   const loading = useSelector((state) => state.alerts.loading);
   return (
@@ -37,15 +39,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-
-            <Route
-              path="/notification"
-              element={
-                <ProtectedRoute>
-                  <Notification />
-                </ProtectedRoute>
-              }
-            />
             <Route
               path="/user/profile/:id"
               element={
@@ -59,6 +52,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <FeedPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/messages/:id"
+              element={
+                <ProtectedRoute>
+                  <MessagingPage />
                 </ProtectedRoute>
               }
             />
@@ -155,6 +156,22 @@ function App() {
               element={
                 <PublicRoute>
                   <Login />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/forgot-password"
+              element={
+                <PublicRoute>
+                  <Forgotpass />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/reset-password/:token"
+              element={
+                <PublicRoute>
+                  <ResetPassword />
                 </PublicRoute>
               }
             />

@@ -4,7 +4,8 @@ import { Table } from "antd";
 import axios from "axios";
 
 const GetAllStudents = () => {
-  const [student, setstudent] = useState([]);
+  const [students, setStudents] = useState([]);
+
   const getStudents = async () => {
     try {
       const res = await axios.get(
@@ -21,7 +22,7 @@ const GetAllStudents = () => {
           ...user,
           key: user._id || index, // Using _id or index as key
         }));
-        setstudent(usersWithKeys);
+        setStudents(usersWithKeys);
       }
     } catch (error) {
       console.log(error);
@@ -31,6 +32,7 @@ const GetAllStudents = () => {
   useEffect(() => {
     getStudents();
   }, []);
+
   const columns = [
     {
       title: "Name",
@@ -42,20 +44,8 @@ const GetAllStudents = () => {
       dataIndex: "email",
       key: "email",
     },
-
-    {
-      title: "Actions",
-      dataIndex: "actions",
-      key: "actions",
-      render: (text, record) => (
-        <div className="flex justify-center">
-          <button className="bg-red-500 text-white py-2 px-4 rounded">
-            Block
-          </button>
-        </div>
-      ),
-    },
   ];
+
   return (
     <Layout>
       <div className="bg-white text-gray-800 p-4 sm:p-8 rounded-lg shadow-lg w-full min-h-screen border border-blue-500">
@@ -63,7 +53,7 @@ const GetAllStudents = () => {
         <div className="overflow-x-auto">
           <Table
             columns={columns}
-            dataSource={student}
+            dataSource={students}
             pagination={{ pageSize: 10 }}
           />
         </div>

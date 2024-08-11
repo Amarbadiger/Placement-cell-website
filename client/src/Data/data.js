@@ -17,6 +17,11 @@ export const AdminMenu = [
     icon: "fa-solid fa-house",
   },
   {
+    name: "Feed",
+    path: "/user/feeds",
+    icon: "fa-solid fa-bomb",
+  },
+  {
     name: "Recruiter",
     path: "/admin/recruiter",
     icon: "fa-solid fa-user-doctor",

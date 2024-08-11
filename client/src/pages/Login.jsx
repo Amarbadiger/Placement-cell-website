@@ -109,12 +109,14 @@ const Login = () => {
               </button>
             </Form.Item>
           </Form>
-          <p className="text-center mt-4 text-gray-400">
-            Not registered yet?{" "}
+          <div className="flex justify-between mt-4 text-gray-400">
+            <Link to="/forgot-password" className="hover:underline">
+              Forgot Password?
+            </Link>
             <Link to="/register" className="text-blue-500 hover:underline">
               Register now
             </Link>
-          </p>
+          </div>
         </div>
       </div>
     </div>

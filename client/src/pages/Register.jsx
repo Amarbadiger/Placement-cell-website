@@ -58,31 +58,55 @@ const Register = () => {
             <Form.Item
               label={<span className="text-gray-200">Name</span>}
               name="name"
+              rules={[{ required: true, message: "Please enter your name!" }]}
             >
               <Input
                 type="text"
-                className="w-full bg-gray-700  border-gray-600"
-                required
+                className="w-full bg-gray-700 border-gray-600"
               />
             </Form.Item>
             <Form.Item
               label={<span className="text-gray-200">Email</span>}
               name="email"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter a valid email!",
+                },
+                {
+                  type: "email",
+                  message: "Invalid email address!",
+                },
+                {
+                  pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Please enter a valid email address!",
+                },
+              ]}
             >
               <Input
                 type="email"
-                className="w-full bg-gray-700  border-gray-600"
-                required
+                className="w-full bg-gray-700 border-gray-600"
               />
             </Form.Item>
             <Form.Item
               label={<span className="text-gray-200">Password</span>}
               name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter your password!",
+                },
+                {
+                  pattern:
+                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                  message:
+                    "Password must be at least 8 characters, including one letter, one number, and one special character!",
+                },
+              ]}
             >
               <Input
                 type="password"
-                className="w-full bg-gray-700  border-gray-600"
-                required
+                className="w-full bg-gray-700 border-gray-600"
               />
             </Form.Item>
             <Form.Item
@@ -92,7 +116,7 @@ const Register = () => {
             >
               <Select
                 placeholder="Select your role"
-                className="w-full bg-gray-700  border-gray-600"
+                className="w-full bg-gray-700 border-gray-600"
               >
                 <Option value="student">Student</Option>
                 <Option value="recruiter">Recruiter</Option>

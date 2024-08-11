@@ -8,6 +8,7 @@ import {
   FaComment as CommentIcon,
   FaUserPlus as FollowIcon, // Add icon for Follow button
 } from "react-icons/fa";
+import { message } from "antd";
 
 const FeedPage = () => {
   const [posts, setPosts] = useState([]);
@@ -124,6 +125,7 @@ const FeedPage = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+        message.success("User unfollowed successfully");
       } else {
         setFollowedUsers(new Set([...followedUsers, authorId]));
         await axios.post(
@@ -133,9 +135,11 @@ const FeedPage = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+        message.success("User followed successfully");
       }
     } catch (error) {
       console.log(error);
+      message.error("An error occurred while following/unfollowing the user");
     }
   };
 

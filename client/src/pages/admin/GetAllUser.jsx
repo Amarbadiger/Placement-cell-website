@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import axios from "axios";
-import { Table } from "antd";
+import { Table, message } from "antd";
 
 const GetAllUser = () => {
   const [users, setUsers] = useState([]);
@@ -17,7 +17,6 @@ const GetAllUser = () => {
         }
       );
       if (res.data.success) {
-        // Add a unique key to each user
         const usersWithKeys = res.data.data.map((user, index) => ({
           ...user,
           key: user._id || index, // Using _id or index as key
@@ -26,6 +25,29 @@ const GetAllUser = () => {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const toggleBlockStatus = async (id, isBlocked) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/v1/admin/block",
+        { id, isBlocked },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (res.data.success) {
+        message.success(
+          `User ${isBlocked ? "blocked" : "unblocked"} successfully`
+        );
+        getUsers(); // Refresh the user list
+      }
+    } catch (error) {
+      console.log(error);
+      message.error("An error occurred while updating the block status.");
     }
   };
 
@@ -44,15 +66,27 @@ const GetAllUser = () => {
       dataIndex: "email",
       key: "email",
     },
-
+    {
+      title: "Status",
+      dataIndex: "isBlocked",
+      key: "isBlocked",
+      render: (text, record) => (
+        <span>{record.isBlocked ? "Blocked" : "Active"}</span>
+      ),
+    },
     {
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
       render: (text, record) => (
         <div className="flex justify-center">
-          <button className="bg-red-500 text-white py-2 px-4 rounded">
-            Block
+          <button
+            className={`py-2 px-4 rounded ${
+              record.isBlocked ? "bg-green-500" : "bg-red-500"
+            } text-white`}
+            onClick={() => toggleBlockStatus(record.key, !record.isBlocked)}
+          >
+            {record.isBlocked ? "Unblock" : "Block"}
           </button>
         </div>
       ),

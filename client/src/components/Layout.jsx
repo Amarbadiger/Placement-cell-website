@@ -73,16 +73,6 @@ const Layout = ({ children }) => {
               </span>
             </div>
             <div>
-              <Badge
-                count={user && user.notification.length}
-                className="m-3"
-                onClick={() => {
-                  navigate("/notification");
-                }}
-              >
-                <i className="fa-solid fa-bell text-white text-2xl hover:text-violet-800 transition duration-300 cursor-pointer"></i>
-              </Badge>
-
               <Link
                 className="capitalize no-underline text-xl text-white hover:text-violet-800 transition duration-300 ml-2 shadow-md p-2"
                 to={`/user/profile/${user?._id}`}
@@ -112,11 +102,7 @@ const Layout = ({ children }) => {
             >
               <i className="fa-solid fa-right-from-bracket mr-2"></i> Logout
             </div>
-            <div className="block py-2 px-4 text-lg text-gray-800 hover:bg-gray-100 transition duration-300 cursor-pointer">
-              <Link to="/notification">
-                <i className="fa-solid fa-bell mr-2"></i> Notifications
-              </Link>
-            </div>
+
             <div className="block py-2 px-4 text-lg text-gray-800 hover:bg-gray-100 transition duration-300 cursor-pointer">
               <Link
                 className="capitalize no-underline text-xl text-black ml-2 shadow-md p-2"

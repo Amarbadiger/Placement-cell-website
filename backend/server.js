@@ -5,37 +5,41 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
-//dotenv config
+// dotenv config
 dotenv.config();
 
-//mongodb connection
+// mongodb connection
 connectDB();
 
-//rest object
+// rest object
 const app = express();
-//for both port running
+
+// middleware
 app.use(cors());
-//middlewares
 app.use(express.json());
 app.use(morgan("dev"));
 
-//routes
+// routes
 app.use("/api/v1/user", require("./routes/userRoute"));
-// Admin Routes
 app.use("/api/v1/admin", require("./routes/AdminRoute"));
-//Contact Route Hero page
 app.use("/api/v1/hero", require("./routes/contactFormRoute"));
-//Post Routes
 app.use("/api/v1/", require("./routes/PostRoute"));
-// Feed Route
 app.use("/api/v1/feeds", require("./routes/FeedRoute"));
+app.use("/api/v1/messege", require("./routes/messageRoutes"));
 
-//port
+// error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Something went wrong!" });
+});
+
+// port
 const port = process.env.PORT || 8080;
-//listen port
+
+// listen port
 app.listen(port, () => {
   console.log(
-    `server running is running  ${process.env.NODE_MODE} mode on port ${process.env.PORT}`
-      .bgCyan.white
+    `Server running in ${process.env.NODE_MODE} mode on port ${port}`.bgCyan
+      .white
   );
 });

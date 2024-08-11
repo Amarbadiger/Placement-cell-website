@@ -138,6 +138,30 @@ const singleHomePagePost = async (req, res) => {
   }
 };
 
+const toggleBlockStatus = async (req, res) => {
+  try {
+    const { id, isBlocked } = req.body;
+
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    user.isBlocked = isBlocked;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: `User ${isBlocked ? "blocked" : "unblocked"} successfully`,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
 module.exports = {
   getAllusersController,
   getAllRecruiter,
@@ -145,4 +169,5 @@ module.exports = {
   postUpdate,
   homePagePost,
   singleHomePagePost,
+  toggleBlockStatus,
 };

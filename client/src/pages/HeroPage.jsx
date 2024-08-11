@@ -26,6 +26,24 @@ const HeroPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Email validation regex to check for .com or .in domains
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in)$/;
+    // Phone number validation regex (Indian format example)
+    const phoneRegex = /^[6-9]\d{9}$/;
+
+    if (!emailRegex.test(formData.email)) {
+      message.error(
+        "Please enter a valid email address ending with .com or .in"
+      );
+      return;
+    }
+
+    if (!phoneRegex.test(formData.phone)) {
+      message.error("Please enter a valid 10-digit phone number");
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:8000/api/v1/hero/contact-form",
@@ -35,9 +53,17 @@ const HeroPage = () => {
       message.success(
         "The data is sent to admin. We will reach out to you soon."
       );
+      // Optionally, reset form data after successful submission
+      setFormData({
+        firstname: "",
+        lastname: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
     } catch (error) {
       console.error(error);
-      message.error("Please fill all the details");
+      message.error("An error occurred. Please try again later.");
     }
   };
 

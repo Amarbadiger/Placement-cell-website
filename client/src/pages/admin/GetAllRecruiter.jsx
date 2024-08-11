@@ -4,8 +4,9 @@ import { Table } from "antd";
 import axios from "axios";
 
 const GetAllRecruiter = () => {
-  const [Recruiter, setRecruiter] = useState([]);
-  const getRecruiter = async () => {
+  const [recruiters, setRecruiters] = useState([]);
+
+  const getRecruiters = async () => {
     try {
       const res = await axios.get(
         "http://localhost:8000/api/v1/admin/allRecruiter",
@@ -16,12 +17,12 @@ const GetAllRecruiter = () => {
         }
       );
       if (res.data.success) {
-        // Add a unique key to each user
-        const usersWithKeys = res.data.data.map((user, index) => ({
-          ...user,
-          key: user._id || index, // Using _id or index as key
+        // Add a unique key to each recruiter
+        const recruitersWithKeys = res.data.data.map((recruiter, index) => ({
+          ...recruiter,
+          key: recruiter._id || index, // Using _id or index as key
         }));
-        setRecruiter(usersWithKeys);
+        setRecruiters(recruitersWithKeys);
       }
     } catch (error) {
       console.log(error);
@@ -29,8 +30,9 @@ const GetAllRecruiter = () => {
   };
 
   useEffect(() => {
-    getRecruiter();
+    getRecruiters();
   }, []);
+
   const columns = [
     {
       title: "Name",
@@ -42,20 +44,8 @@ const GetAllRecruiter = () => {
       dataIndex: "email",
       key: "email",
     },
-
-    {
-      title: "Actions",
-      dataIndex: "actions",
-      key: "actions",
-      render: (text, record) => (
-        <div className="flex justify-center">
-          <button className="bg-red-500 text-white py-2 px-4 rounded">
-            Block
-          </button>
-        </div>
-      ),
-    },
   ];
+
   return (
     <Layout>
       <div className="bg-white text-gray-800 p-4 sm:p-8 rounded-lg shadow-lg w-full min-h-screen border border-blue-500">
@@ -63,7 +53,7 @@ const GetAllRecruiter = () => {
         <div className="overflow-x-auto">
           <Table
             columns={columns}
-            dataSource={Recruiter}
+            dataSource={recruiters}
             pagination={{ pageSize: 10 }}
           />
         </div>

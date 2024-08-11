@@ -38,6 +38,10 @@ const Profile = () => {
   // Ensure currentUser is not null and compare IDs
   const isCurrentUser = currentUser && currentUser._id === params.id;
 
+  const handleMessageClick = () => {
+    navigate(`/messages/${params.id}`);
+  };
+
   return (
     <Layout>
       <div className="min-h-screen py-12">
@@ -67,6 +71,14 @@ const Profile = () => {
                         Following ({user.following.length})
                       </button>
                     </div>
+                    {!isCurrentUser && (
+                      <button
+                        className="mt-4 px-5 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+                        onClick={handleMessageClick}
+                      >
+                        Message
+                      </button>
+                    )}
                   </div>
                 </div>
                 <div className="mb-6">
