@@ -22,6 +22,7 @@ import FeedPage from "./pages/FeedPage";
 import Forgotpass from "./pages/Forgotpass";
 import ResetPassword from "./pages/ResetPassword";
 import MessagingPage from "./pages/MessagingPage";
+import Feedback from "./pages/Feedback";
 function App() {
   const loading = useSelector((state) => state.alerts.loading);
   return (
@@ -180,6 +181,14 @@ function App() {
               element={
                 <PublicRoute>
                   <HeroPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/Feedback"
+              element={
+                <PublicRoute>
+                  <Feedback />
                 </PublicRoute>
               }
             />

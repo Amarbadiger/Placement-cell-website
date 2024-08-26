@@ -58,7 +58,14 @@ const Register = () => {
             <Form.Item
               label={<span className="text-gray-200">Name</span>}
               name="name"
-              rules={[{ required: true, message: "Please enter your name!" }]}
+              rules={[
+                { required: true, message: "Please enter your name!" },
+                { min: 3, message: "Name must be at least 3 characters long." },
+                {
+                  pattern: /^[a-zA-Z\s]+$/,
+                  message: "Name can only contain letters and spaces.",
+                },
+              ]}
             >
               <Input
                 type="text"

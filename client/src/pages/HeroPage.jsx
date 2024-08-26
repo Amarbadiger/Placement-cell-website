@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HeroImg from "../assets/images/hero.jpg";
 import logo from "../assets/images/logo.png";
 import about from "../assets/images/about.jpg";
@@ -31,7 +31,17 @@ const HeroPage = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in)$/;
     // Phone number validation regex (Indian format example)
     const phoneRegex = /^[6-9]\d{9}$/;
+    // name validation
+    const namevali = /^[a-zA-Z\s]+$/;
 
+    if (!namevali.test(formData.firstname)) {
+      message.error("Firstname can only contain letters");
+      return;
+    }
+    if (!namevali.test(formData.lastname)) {
+      message.error("Lastname can only contain letters");
+      return;
+    }
     if (!emailRegex.test(formData.email)) {
       message.error(
         "Please enter a valid email address ending with .com or .in"
@@ -206,7 +216,7 @@ const HeroPage = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-l from-gray-900 via-gray-800 to-black text-white p-6 mt-5">
+      <footer className="bg-gradient-to-l from-gray-900 via-gray-800 to-black text-white p-6 mt-5 rounded-md relative">
         <div className="container mx-auto flex flex-col md:flex-row justify-evenly items-start md:items-center space-y-6 md:space-y-0">
           {/* Logo */}
           <div className="flex-shrink-0 mb-4 md:mb-0 w-full md:w-1/4 flex justify-center md:justify-start">
@@ -230,7 +240,7 @@ const HeroPage = () => {
             </div>
 
             {/* Contact Information */}
-            <div className="flex-grow md:w-1/4 flex flex-col items-center md:items-start">
+            <div className="flex-grow md:w-1/4 flex flex-col items-center md:items-start text-center md:text-left">
               <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
               <p>Principal</p>
               <p className="mt-2">Gogte College of Commerce</p>
@@ -243,6 +253,16 @@ const HeroPage = () => {
                 </a>
               </p>
             </div>
+          </div>
+
+          {/* Send Feedback Link as a Small Button in the Bottom-Right Corner */}
+          <div className="absolute bottom-4 right-4">
+            <Link
+              to="/Feedback"
+              className="bg-gray-700 hover:bg-gray-800 text-white font-medium py-1 px-3 rounded-full text-sm shadow-md transition duration-300 ease-in-out"
+            >
+              Send Feedback
+            </Link>
           </div>
         </div>
       </footer>
