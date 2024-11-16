@@ -12,7 +12,7 @@ const HomePage = () => {
   const getUserData = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/v1/user/getUserdata",
+        "/api/v1/user/getUserdata",
         {},
         {
           headers: {
@@ -32,14 +32,11 @@ const HomePage = () => {
   // Fetch home posts
   const getHomepost = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/v1/admin/homePagePost",
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
+      const res = await axios.get("/api/v1/admin/homePagePost", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
       if (res.data.success) {
         setData(res.data.data);
       }

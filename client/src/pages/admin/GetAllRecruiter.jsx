@@ -8,14 +8,11 @@ const GetAllRecruiter = () => {
 
   const getRecruiters = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/v1/admin/allRecruiter",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const res = await axios.get("/api/v1/admin/allRecruiter", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (res.data.success) {
         // Add a unique key to each recruiter
         const recruitersWithKeys = res.data.data.map((recruiter, index) => ({

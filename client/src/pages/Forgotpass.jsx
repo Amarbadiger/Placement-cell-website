@@ -9,10 +9,7 @@ const Forgotpass = () => {
 
   const onFinishHandler = async (values) => {
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/user/forgot-password",
-        values
-      );
+      const res = await axios.post("/api/v1/user/forgot-password", values);
       if (res.data.success) {
         message.success("Password reset link sent to your email.");
         navigate("/login");

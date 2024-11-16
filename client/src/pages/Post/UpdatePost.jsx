@@ -14,14 +14,11 @@ const UpdatePost = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8000/api/v1/singleposts/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const res = await axios.get(`/api/v1/singleposts/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         if (res.data.success) {
           const { title, content, author } = res.data.post;
           setTitle(title);

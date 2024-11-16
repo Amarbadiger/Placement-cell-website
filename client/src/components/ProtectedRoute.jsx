@@ -13,7 +13,7 @@ const ProtectedRoute = ({ children }) => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        "http://localhost:8000/api/v1/user/getUserdata",
+        "/api/v1/user/getUserdata",
         {
           token: localStorage.getItem("token"),
         },

@@ -15,10 +15,7 @@ const Login = () => {
     setLoading(true);
     try {
       dispatch(showLoading());
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/user/login",
-        values
-      );
+      const res = await axios.post("/api/v1/user/login", values);
       dispatch(hideLoading());
 
       if (res.data.success) {

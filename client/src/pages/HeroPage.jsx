@@ -55,10 +55,7 @@ const HeroPage = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/v1/hero/contact-form",
-        formData
-      );
+      const response = await axios.post("/api/v1/hero/contact-form", formData);
       console.log(response.data);
       message.success(
         "The data is sent to admin. We will reach out to you soon."

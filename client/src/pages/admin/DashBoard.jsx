@@ -43,16 +43,12 @@ const DashBoard = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
-        "http://localhost:8000/api/v1/admin/postUpdate",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.post("/api/v1/admin/postUpdate", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       message.success("Form submitted successfully");
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -73,7 +69,7 @@ const DashBoard = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:8000/api/v1/admin/addImportant",
+        "/api/v1/admin/addImportant",
         formData,
         {
           headers: {
@@ -94,14 +90,11 @@ const DashBoard = () => {
   const fetchContactData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(
-        "http://localhost:8000/api/v1/hero/contactData",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get("/api/v1/hero/contactData", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.data.success) {
         setContactData(response.data.data);
       }

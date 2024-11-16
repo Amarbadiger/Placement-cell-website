@@ -22,14 +22,11 @@ const FeedPage = () => {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/v1/feeds/allPosts",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.get("/api/v1/feeds/allPosts", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (res.data.success) {
         setPosts(res.data.allPost);
       }
@@ -43,7 +40,7 @@ const FeedPage = () => {
       if (likedPosts.has(postId)) {
         setLikedPosts(new Set([...likedPosts].filter((id) => id !== postId)));
         await axios.post(
-          `http://localhost:8000/api/v1/posts/unlike/${postId}`,
+          `/api/v1/posts/unlike/${postId}`,
           {},
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -52,7 +49,7 @@ const FeedPage = () => {
       } else {
         setLikedPosts(new Set([...likedPosts, postId]));
         await axios.post(
-          `http://localhost:8000/api/v1/posts/like/${postId}`,
+          `/api/v1/posts/like/${postId}`,
           {},
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -74,7 +71,7 @@ const FeedPage = () => {
   const handleAddComment = async (postId) => {
     try {
       await axios.post(
-        `http://localhost:8000/api/v1/posts/comment/${postId}`,
+        `/api/v1/posts/comment/${postId}`,
         { text: newComment[postId] },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -119,7 +116,7 @@ const FeedPage = () => {
           new Set([...followedUsers].filter((id) => id !== authorId))
         );
         await axios.post(
-          `http://localhost:8000/api/v1/user/unfollow/${authorId}`,
+          `/api/v1/user/unfollow/${authorId}`,
           {},
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -129,7 +126,7 @@ const FeedPage = () => {
       } else {
         setFollowedUsers(new Set([...followedUsers, authorId]));
         await axios.post(
-          `http://localhost:8000/api/v1/user/follow/${authorId}`,
+          `/api/v1/user/follow/${authorId}`,
           {},
           {
             headers: { Authorization: `Bearer ${token}` },

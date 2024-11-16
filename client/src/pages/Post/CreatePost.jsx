@@ -39,16 +39,12 @@ const CreatePost = () => {
     }
 
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/createPost",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const res = await axios.post("/api/v1/createPost", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       if (res.data.success) {
         message.success(res.data.message);
         navigate(`/user/profile/${id}`);

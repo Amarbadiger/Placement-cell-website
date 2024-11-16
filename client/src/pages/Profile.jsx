@@ -15,14 +15,11 @@ const Profile = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/api/v1/user/profile/${params.id}`,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
+      const res = await axios.get(`/api/v1/user/profile/${params.id}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
       if (res.data.success) {
         setUser(res.data.user);
       }

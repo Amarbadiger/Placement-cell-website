@@ -8,14 +8,11 @@ const GetAllUser = () => {
 
   const getUsers = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/v1/admin/getAllUsers",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const res = await axios.get("/api/v1/admin/getAllUsers", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (res.data.success) {
         const usersWithKeys = res.data.data.map((user, index) => ({
           ...user,

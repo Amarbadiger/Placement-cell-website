@@ -19,10 +19,9 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await axios.put(
-        `http://localhost:8000/api/v1/user/reset-password/${token}`,
-        { password }
-      );
+      const response = await axios.put(`/api/v1/user/reset-password/${token}`, {
+        password,
+      });
       setSuccess(response.data.message);
       setError("");
     } catch (error) {

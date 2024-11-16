@@ -9,14 +9,11 @@ const PostPage = ({ userId, isCurrentUser }) => {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/api/v1/posts/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const res = await axios.get(`/api/v1/posts/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (res.data.success) {
         setPosts(res.data.posts);
       }
@@ -27,14 +24,11 @@ const PostPage = ({ userId, isCurrentUser }) => {
 
   const handleDelete = async (postId) => {
     try {
-      const res = await axios.delete(
-        `http://localhost:8000/api/v1/posts/${postId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const res = await axios.delete(`/api/v1/posts/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       fetchPosts();
       if (res.data.success) {
         message.success(res.data.message);

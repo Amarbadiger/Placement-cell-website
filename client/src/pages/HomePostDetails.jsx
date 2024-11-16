@@ -18,7 +18,7 @@ const HomePostDetails = () => {
   const getSingleHomePost = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/v1/admin/singleHomePagePost",
+        "/api/v1/admin/singleHomePagePost",
         {
           params: params.id,
         },

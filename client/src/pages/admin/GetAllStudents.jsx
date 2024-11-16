@@ -8,14 +8,11 @@ const GetAllStudents = () => {
 
   const getStudents = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/v1/admin/allStudent",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const res = await axios.get("/api/v1/admin/allStudent", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (res.data.success) {
         // Add a unique key to each user
         const usersWithKeys = res.data.data.map((user, index) => ({

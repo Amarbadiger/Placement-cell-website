@@ -16,14 +16,11 @@ const MessagingPage = () => {
   // Fetch user profile
   const fetchUserProfile = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/api/v1/user/profile/${id}`,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
+      const res = await axios.get(`/api/v1/user/profile/${id}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
       if (res.data.success) {
         setUser(res.data.user);
       }
@@ -35,14 +32,11 @@ const MessagingPage = () => {
   // Fetch messages
   const fetchMessages = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/api/v1/messege/${id}`,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
+      const res = await axios.get(`/api/v1/messege/${id}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
       if (res.data.success) {
         setMessages(res.data.messages);
       }
@@ -61,7 +55,7 @@ const MessagingPage = () => {
     if (message) {
       try {
         await axios.post(
-          `http://localhost:8000/api/v1/messege/send`,
+          `/api/v1/messege/send`,
           { recipientId: id, content: message },
           {
             headers: {
